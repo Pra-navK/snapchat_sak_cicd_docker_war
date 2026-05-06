@@ -49,7 +49,7 @@ pipeline {
         stage('Docker Tag the Image') {
             steps {
                 echo "Tagging the Docker image..."
-                sh ' docker tag snapchat-sak-cicd-docker pra-navk/snapchat-sak-cicd-docker:latest'
+                sh ' docker tag snapchat-sak-cicd-docker hubbler/snapchat-sak-cicd-docker:latest'
             }
             post {
                 success {
@@ -63,7 +63,7 @@ pipeline {
         stage('Docker Push the Image') {
             steps {
                 echo "Pushing the Docker image to DockerHub..."
-                sh 'docker push pra-navk/snapchat-sak-cicd-docker:latest'
+                sh 'docker push hubbler/snapchat-sak-cicd-docker:latest'
             }
             post {
                 success {
@@ -78,7 +78,7 @@ pipeline {
             steps {
                 echo "Cleaning up local Docker images..."
                 sh '''
-                    docker rmi pra-navk/snapchat-sak-cicd-docker:latest
+                    docker rmi hubbler/snapchat-sak-cicd-docker:latest
                     docker rmi snapchat-sak-cicd-docker
                 '''
             }
@@ -125,14 +125,14 @@ pipeline {
                                 docker stop snapchat-container || true
                                 docker rm snapchat-container || true
                                 echo "🚀 Starting new container..."
-                                docker run -d -p 8084:8080 --name snapchat-container pra-navk/snapchat-sak-cicd-docker:latest
+                                docker run -d -p 8084:8080 --name snapchat-container hubbler/snapchat-sak-cicd-docker:latest
                             '''
                         } else {
                             echo "⏩ Skipping container restart as per user choice."
                         }
                     } else {
                         echo "🚀 No existing container found — starting new one..."
-                        sh 'docker run -d -p 8084:8080 --name snapchat-container pra-navk/snapchat-sak-cicd-docker:latest'
+                        sh 'docker run -d -p 8084:8080 --name snapchat-container hubbler/snapchat-sak-cicd-docker:latest'
                     }
                 }
             }
